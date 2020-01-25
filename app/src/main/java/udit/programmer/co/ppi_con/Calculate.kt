@@ -163,7 +163,6 @@ class Calculate : AppCompatActivity() {
     }
 
     fun postfix_to_infix(){
-        
 
     }
 
@@ -185,5 +184,42 @@ class Calculate : AppCompatActivity() {
 
     fun infix_to_prefix(){
 
+    }
+
+    fun Prec(ch: Char): Int {
+        if (ch == '+' || ch == '-') {
+            return 1
+        } else if (ch == '*' || ch == '/') {
+            return 2
+        } else if (ch == '^') {
+            return 3
+        } else {
+            return -1
+        }
+    }
+
+    fun cti(c: Char): Int {
+
+        if (c == '0') {
+            return 0
+        } else if (c == '1') {
+            return 1
+        } else if (c == '2') {
+            return 2
+        } else if (c == '3') {
+            return 3
+        } else if (c == '4') {
+            return 4
+        } else if (c == '5') {
+            return 5
+        } else if (c == '6') {
+            return 6
+        } else if (c == '7') {
+            return 7
+        } else if (c == '8') {
+            return 8
+        } else {
+            return 9
+        }
     }
 }
