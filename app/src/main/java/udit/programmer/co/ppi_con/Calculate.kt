@@ -176,6 +176,8 @@ class Calculate : AppCompatActivity() {
     fun infix_to_postfix(exp: String, stack: Stack) {
 
         var ans = ""
+
+
         var temp = 0
         for (i in 0..exp.length - 1) {
 
