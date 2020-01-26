@@ -1,3 +1,5 @@
+package udit.programmer.co.ppi_con
+
 class Stack {
     public var data: IntArray
     public var tos: Int = 0
@@ -27,7 +29,7 @@ class Stack {
     fun push(item: Int) {
 
         if (isFull) {
-            throw Exception("Stack is Full")
+            throw Exception("udit.programmer.co.ppi_con.Stack is Full")
         }
 
         tos++
@@ -38,7 +40,7 @@ class Stack {
     fun pop(): Int {
 
         if (isEmpty) {
-            throw Exception("Stack is Empty")
+            throw Exception("udit.programmer.co.ppi_con.Stack is Empty")
         }
 
         val rv = this.data[this.tos]
@@ -51,7 +53,7 @@ class Stack {
     fun top(): Int {
 
         if (isEmpty) {
-            throw Exception("Stack is Empty")
+            throw Exception("udit.programmer.co.ppi_con.Stack is Empty")
         }
 
         return data[tos]

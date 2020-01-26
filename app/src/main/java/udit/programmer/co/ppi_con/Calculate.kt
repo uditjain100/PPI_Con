@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_calculate.*
 
+
 class Calculate : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,28 +91,27 @@ class Calculate : AppCompatActivity() {
 
         if (value.equals("a")) {
             bt43.setOnClickListener {
-                postfix_to_infix()
-                //equallogic(exp.text.toString(), Stackcar(), Stack())
+                postfix_to_infix(exp.text.toString(), Stack())
             }
         } else if (value.equals("b")) {
             bt43.setOnClickListener {
-                postfix_to_prefix()
+                postfix_to_prefix(exp.text.toString(), Stack())
             }
         } else if (value.equals("c")) {
             bt43.setOnClickListener {
-                prefix_to_infix()
+                prefix_to_infix(exp.text.toString(), Stack())
             }
         } else if (value.equals("d")) {
             bt43.setOnClickListener {
-                prefix_to_postfix()
+                prefix_to_postfix(exp.text.toString(), Stack())
             }
         } else if (value.equals("e")) {
             bt43.setOnClickListener {
-                infix_to_postfix()
+                infix_to_postfix(exp.text.toString(), Stack())
             }
         } else if (value.equals("f")) {
             bt43.setOnClickListener {
-                infix_to_prefix()
+                infix_to_prefix(exp.text.toString(), Stack())
             }
         }
 
@@ -134,11 +134,6 @@ class Calculate : AppCompatActivity() {
             exp.setText("")
         }
 
-        /* val abc: String = exp.text.substring(exp.length() - 1)
-
-         if (abc.equals("+") || abc.equals("-") || abc.equals("*") || abc.equals("/")) {
-             return
-         } */
         exp.append(res.text)
         exp.append(str)
         res.setText("")
@@ -162,27 +157,119 @@ class Calculate : AppCompatActivity() {
 
     }
 
-    fun postfix_to_infix(){
+    fun postfix_to_infix(exp: String, stack: Stack) {
 
     }
 
-    fun postfix_to_prefix(){
+    fun postfix_to_prefix(exp: String, stack: Stack) {
 
     }
 
-    fun prefix_to_infix(){
+    fun prefix_to_infix(exp: String, stack: Stack) {
 
     }
 
-    fun prefix_to_postfix(){
+    fun prefix_to_postfix(exp: String, stack: Stack) {
 
     }
 
-    fun infix_to_postfix(){
+    fun infix_to_postfix(exp: String, stack: Stack) {
+
+        var ans = ""
+        var temp = 0
+        for (i in 0..exp.length - 1) {
+
+            val ch = exp.elementAt(i)
+            if (ch >= '0' && ch <= '9') {
+                ans += exp.substring(i, i + 1)
+            } else if (ch == '(') {
+                stack.push(ch.toInt())
+            } else if (ch == ')') {
+                while (stack.top() !== '('.toInt()) {
+                    val rv = stack.pop()
+                    ans += cts(rv.toChar())
+                }
+            } else {
+                if (temp == 0) {
+                    stack.push(ch.toInt())
+                    temp = 1
+                } else {
+                    if (stack.top() === 40) {
+                        stack.push(ch.toInt())
+                    } else if (stack.top().toInt() < ch.toInt()) {
+                        stack.push(ch.toInt())
+                    } else if (stack.top() as Int >= ch.toInt()) {
+                        while (stack.isEmpty || stack.top().toInt() < ch.toInt()) {
+                            val rv = stack.pop()
+                            print(rv)
+                            ans += cts(rv.toChar())
+                        }
+                        stack.push(ch.toInt())
+                    }
+                }
+            }
+
+        }
+        while (!stack.isEmpty) {
+            val rv = stack.pop()
+            if (rv != 40) {
+                ans += cts(rv.toChar())
+            }
+        }
+
+        res.setText(ans)
 
     }
 
-    fun infix_to_prefix(){
+    fun infix_to_prefix(exp2: String, stack: Stack) {
+
+        var exp = exp2.reversed()
+
+        var ans = ""
+        var temp = 0
+        for (i in 0..exp.length - 1) {
+
+            val ch = exp.elementAt(i)
+            if (ch >= '0' && ch <= '9') {
+                ans += exp.substring(i, i + 1)
+            } else if (ch == '(') {
+                stack.push(ch.toInt())
+            } else if (ch == ')') {
+                while (stack.top() !== '('.toInt()) {
+                    val rv = stack.pop()
+                    ans += cts(rv.toChar())
+                }
+            } else {
+                if (temp == 0) {
+                    stack.push(ch.toInt())
+                    temp = 1
+                } else {
+                    if (stack.top() === 40) {
+                        stack.push(ch.toInt())
+                    } else if (stack.top().toInt() < ch.toInt()) {
+                        stack.push(ch.toInt())
+                    } else if (stack.top() as Int >= ch.toInt()) {
+                        while (stack.isEmpty || stack.top().toInt() < ch.toInt()) {
+                            val rv = stack.pop()
+                            print(rv)
+                            ans += cts(rv.toChar())
+                        }
+                        stack.push(ch.toInt())
+                    }
+                }
+            }
+
+        }
+        while (!stack.isEmpty) {
+            val rv = stack.pop()
+            if (rv != 40) {
+                ans += cts(rv.toChar())
+            }
+        }
+
+        var ans2 = ans.reversed()
+
+        res.setText(ans2)
 
     }
 
@@ -221,5 +308,45 @@ class Calculate : AppCompatActivity() {
         } else {
             return 9
         }
+    }
+
+    fun cts(ch: Char): String {
+        if (ch == '+') {
+            return "+";
+        } else if (ch == '-') {
+            return "-";
+        } else if (ch == '*') {
+            return "*";
+        } else if (ch == '/') {
+            return "/";
+        } else if (ch == '(') {
+            return "(";
+        } else if (ch == ')') {
+            return ")";
+        } else if (ch == '^') {
+            return "^";
+        } else if (ch == '1') {
+            return "1";
+        } else if (ch == '2') {
+            return "2";
+        } else if (ch == '3') {
+            return "3";
+        } else if (ch == '4') {
+            return "4";
+        } else if (ch == '5') {
+            return "5";
+        } else if (ch == '6') {
+            return "6";
+        } else if (ch == '7') {
+            return "7";
+        } else if (ch == '8') {
+            return "8";
+        } else if (ch == '9') {
+            return "9";
+        } else if (ch == '0') {
+            return "0";
+        }
+
+        return "";
     }
 }
