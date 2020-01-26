@@ -91,27 +91,33 @@ class Calculate : AppCompatActivity() {
 
         if (value.equals("a")) {
             bt43.setOnClickListener {
-                postfix_to_infix(exp.text.toString(), Stack())
+                var ans: String = postfix_to_infix(exp.text.toString(), java.util.Stack())
+                res.setText(ans)
             }
         } else if (value.equals("b")) {
             bt43.setOnClickListener {
-                postfix_to_prefix(exp.text.toString(), Stack())
+                var ans: String = postfix_to_prefix(exp.text.toString(), java.util.Stack(), Stack())
+                res.setText(ans)
             }
         } else if (value.equals("c")) {
             bt43.setOnClickListener {
-                prefix_to_infix(exp.text.toString(), Stack())
+                var ans: String = prefix_to_infix(exp.text.toString(), java.util.Stack())
+                res.setText(ans)
             }
         } else if (value.equals("d")) {
             bt43.setOnClickListener {
-                prefix_to_postfix(exp.text.toString(), Stack())
+                var ans: String = prefix_to_postfix(exp.text.toString(), java.util.Stack(), Stack())
+                res.setText(ans)
             }
         } else if (value.equals("e")) {
             bt43.setOnClickListener {
-                infix_to_postfix(exp.text.toString(), Stack())
+                var ans: String = infix_to_postfix(exp.text.toString(), Stack())
+                res.setText(ans)
             }
         } else if (value.equals("f")) {
             bt43.setOnClickListener {
-                infix_to_prefix(exp.text.toString(), Stack())
+                var ans: String = infix_to_prefix(exp.text.toString(), Stack())
+                res.setText(ans)
             }
         }
 
@@ -157,27 +163,186 @@ class Calculate : AppCompatActivity() {
 
     }
 
-    fun postfix_to_infix(exp: String, stack: Stack) {
+    fun postfix_to_infix(exp: String, stack: java.util.Stack<String>): String {
+
+        for (i in 0..exp.length - 1) {
+
+            val ch = exp.elementAt(i)
+            if (ch >= '0' && ch <= '9') {
+                stack.push(exp.substring(i, i + 1))
+            } else {
+                val a = stack.pop()
+                val b = stack.pop()
+                var c = b + exp.substring(i, i + 1) + a
+                c = "($c)"
+                stack.push(c)
+            }
+        }
+
+        return stack.peek()
 
     }
 
-    fun postfix_to_prefix(exp: String, stack: Stack) {
+    fun postfix_to_prefix(exp: String, stack: java.util.Stack<String>, stack2: Stack): String {
 
-    }
+        for (i in 0..exp.length - 1) {
 
-    fun prefix_to_infix(exp: String, stack: Stack) {
+            val ch = exp.elementAt(i)
+            if (ch >= '0' && ch <= '9') {
+                stack.push(exp.substring(i, i + 1))
+            } else {
+                val a = stack.pop()
+                val b = stack.pop()
+                var c = b + exp.substring(i, i + 1) + a
+                c = "($c)"
+                stack.push(c)
+            }
+        }
 
-    }
+        var exp2: String = stack.peek()
 
-    fun prefix_to_postfix(exp: String, stack: Stack) {
-
-    }
-
-    fun infix_to_postfix(exp: String, stack: Stack) {
+        var exp1 = exp2.reversed()
 
         var ans = ""
+        var temp = 0
+        for (i in 0..exp1.length - 1) {
+
+            val ch = exp1.elementAt(i)
+            if (ch >= '0' && ch <= '9') {
+                ans += exp1.substring(i, i + 1)
+            } else if (ch == '(') {
+                stack2.push(ch.toInt())
+            } else if (ch == ')') {
+                while (stack2.top() !== '('.toInt()) {
+                    val rv = stack2.pop()
+                    ans += cts(rv.toChar())
+                }
+            } else {
+                if (temp == 0) {
+                    stack2.push(ch.toInt())
+                    temp = 1
+                } else {
+                    if (stack2.top() === 40) {
+                        stack2.push(ch.toInt())
+                    } else if (stack2.top().toInt() < ch.toInt()) {
+                        stack2.push(ch.toInt())
+                    } else if (stack2.top() as Int >= ch.toInt()) {
+                        while (stack2.isEmpty || stack2.top().toInt() < ch.toInt()) {
+                            val rv = stack2.pop()
+                            print(rv)
+                            ans += cts(rv.toChar())
+                        }
+                        stack2.push(ch.toInt())
+                    }
+                }
+            }
+
+        }
+        while (!stack2.isEmpty) {
+            val rv = stack2.pop()
+            if (rv != 40) {
+                ans += cts(rv.toChar())
+            }
+        }
+
+        var ans2 = ans.reversed()
+
+        return ans2
+
+    }
+
+    fun prefix_to_infix(exp2: String, stack: java.util.Stack<String>): String {
+
+        var exp = exp2.reversed()
+
+        for (i in 0..exp.length - 1) {
+
+            val ch = exp.elementAt(i)
+            if (ch >= '0' && ch <= '9') {
+                stack.push(exp.substring(i, i + 1))
+            } else {
+                val a = stack.pop()
+                val b = stack.pop()
+                var c = a + exp.substring(i, i + 1) + b
+                c = "($c)"
+                stack.push(c)
+            }
+        }
+
+        return stack.peek()
 
 
+    }
+
+    fun prefix_to_postfix(exp2: String, stack: java.util.Stack<String>, stack2: Stack): String {
+
+        var exp = exp2.reversed()
+
+        for (i in 0..exp.length - 1) {
+
+            val ch = exp.elementAt(i)
+            if (ch >= '0' && ch <= '9') {
+                stack.push(exp.substring(i, i + 1))
+            } else {
+                val a = stack.pop()
+                val b = stack.pop()
+                var c = a + exp.substring(i, i + 1) + b
+                c = "($c)"
+                stack.push(c)
+            }
+        }
+        var exp1: String = stack.peek()
+
+        var ans = ""
+        var temp = 0
+        for (i in 0..exp1.length - 1) {
+
+            val ch = exp1.elementAt(i)
+            if (ch >= '0' && ch <= '9') {
+                ans += exp1.substring(i, i + 1)
+            } else if (ch == '(') {
+                stack2.push(ch.toInt())
+            } else if (ch == ')') {
+                while (stack2.top() !== '('.toInt()) {
+                    val rv = stack2.pop()
+                    ans += cts(rv.toChar())
+                }
+            } else {
+                if (temp == 0) {
+                    stack2.push(ch.toInt())
+                    temp = 1
+                } else {
+                    if (stack2.top() === 40) {
+                        stack2.push(ch.toInt())
+                    } else if (stack2.top().toInt() < ch.toInt()) {
+                        stack2.push(ch.toInt())
+                    } else if (stack2.top() as Int >= ch.toInt()) {
+                        while (stack2.isEmpty || stack2.top().toInt() < ch.toInt()) {
+                            val rv = stack2.pop()
+                            print(rv)
+                            ans += cts(rv.toChar())
+                        }
+                        stack2.push(ch.toInt())
+                    }
+                }
+            }
+
+        }
+        while (!stack2.isEmpty) {
+            val rv = stack2.pop()
+            if (rv != 40) {
+                ans += cts(rv.toChar())
+            }
+        }
+
+        return ans
+
+
+    }
+
+    fun infix_to_postfix(exp: String, stack: Stack): String {
+
+        var ans = ""
         var temp = 0
         for (i in 0..exp.length - 1) {
 
@@ -219,11 +384,11 @@ class Calculate : AppCompatActivity() {
             }
         }
 
-        res.setText(ans)
+        return ans
 
     }
 
-    fun infix_to_prefix(exp2: String, stack: Stack) {
+    fun infix_to_prefix(exp2: String, stack: Stack): String {
 
         var exp = exp2.reversed()
 
@@ -271,45 +436,8 @@ class Calculate : AppCompatActivity() {
 
         var ans2 = ans.reversed()
 
-        res.setText(ans2)
+        return ans2
 
-    }
-
-    fun Prec(ch: Char): Int {
-        if (ch == '+' || ch == '-') {
-            return 1
-        } else if (ch == '*' || ch == '/') {
-            return 2
-        } else if (ch == '^') {
-            return 3
-        } else {
-            return -1
-        }
-    }
-
-    fun cti(c: Char): Int {
-
-        if (c == '0') {
-            return 0
-        } else if (c == '1') {
-            return 1
-        } else if (c == '2') {
-            return 2
-        } else if (c == '3') {
-            return 3
-        } else if (c == '4') {
-            return 4
-        } else if (c == '5') {
-            return 5
-        } else if (c == '6') {
-            return 6
-        } else if (c == '7') {
-            return 7
-        } else if (c == '8') {
-            return 8
-        } else {
-            return 9
-        }
     }
 
     fun cts(ch: Char): String {
